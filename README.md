@@ -90,7 +90,7 @@ class Point2D implements Evaluable {
   }
 
   hashCode(): number {
-    return hash(this);
+    return hash({ x: this.x, y: this.y });
   }
 }
 
