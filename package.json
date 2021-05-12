@@ -32,8 +32,8 @@
   },
   "keywords": [
     "evaluation",
-    "hash",
-    "comparison"
+    "comparison",
+    "ecmascript"
   ],
   "bugs": {
     "url": "https://github.com/MaxRoecker/evaluable/issues"
