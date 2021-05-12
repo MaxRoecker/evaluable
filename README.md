@@ -23,7 +23,7 @@ import { is } from 'evaluable';
 
 is(null, undefined) // returns false
 
-is(null, null) // returns false
+is(null, null) // returns true
 
 is(null, '') // returns false
 
