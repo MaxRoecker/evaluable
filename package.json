@@ -1,6 +1,6 @@
 {
   "name": "evaluable",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Max Naegeler Roecker",
   "license": "MIT",
   "description": "A tiny library to compare objects as values in ECMAScript",
