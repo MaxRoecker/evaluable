@@ -48,18 +48,17 @@ export interface Evaluable<T = Object> {
  *     true;
  *   - are the same object, i.e., both references the same memory address.
  *
- * This methods differentiates from [`==` operator][==] because it does not
- * perform a type conversion when comparing the inputs.
+ * This function differs from:
  *
- * This methods differentiates from [`===` operator][===] because it returns true
- * when comparing `NaN` with itself.
- *
- * This methods differentiates from [`Object.is` method][Object.is] because it
- * returns true when comparing `+0` and `-0`.
- *
- * This methods differentiates from [“same-value-zero” algorithm][same-value-zero],
- * which is used in collections such as [`Set`][Set] and [`Map`][Map], because
- * it considers the results of `equals` and overwritten `valueOf` methods.
+ * - the [`==` operator][==] because it does not perform a type conversion when
+ *   comparing the inputs;
+ * - the [`===` operator][===] because it returns true when comparing `NaN` with
+ *   itself;
+ * - the [`Object.is` method][Object.is] because it returns true when comparing
+ *   `+0` and `-0`;
+ * - the [“same-value-zero” algorithm][same-value-zero], which is used in
+ *   collections such as [`Set`][Set] and [`Map`][Map], because it considers the
+ *   results of `equals` and overwritten `valueOf` methods.
  *
  * [==]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality
  * [===]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality
