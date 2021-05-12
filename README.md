@@ -130,13 +130,13 @@ Two inputs, `a` and `b`, have the same value if:
 This methods differentiates from [`==` operator][==] because it does not perform
 a type conversion when comparing the inputs.
 
-This methods diferentiates from [`===` operator][===] because it returns true
+This methods differentiates from [`===` operator][===] because it returns true
 when comparing `NaN` with itself.
 
-This methods diferentiates from [`Object.is` method][Object.is] because it
+This methods differentiates from [`Object.is` method][Object.is] because it
 returns true when comparing `+0` and `-0`.
 
-This methods diferentiates from [“same-value-zero” algorithm][same-value-zero],
+This methods differentiates from [“same-value-zero” algorithm][same-value-zero],
 which is used in collections such as [`Set`][Set] and [`Map`][Map], because it
 considers the results of `equals` and overwritten `valueOf` methods.
 
