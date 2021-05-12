@@ -1,0 +1,89 @@
+{
+  "name": "evaluable",
+  "version": "0.0.1",
+  "author": "Max Naegeler Roecker",
+  "license": "MIT",
+  "description": "A tiny library to compare objects as values in ECMAScript",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "typings": "index.d.ts",
+  "files": [
+    "/dist/index.{d.ts,d.ts.map,js,js.map}",
+    "index.ts"
+  ],
+  "exports": {
+    ".": {
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
+    "test": "jest ./tests.ts",
+    "test:coverage": "npm run test && npx serve ./jest/coverage/lcov-report",
+    "lint": "eslint --ext .ts . --ignore-path .gitignore",
+    "format": "eslint --ext .ts . --fix --ignore-path .gitignore",
+    "prepublish": "npm run build && npm publish --dry-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaxRoecker/evaluable.git"
+  },
+  "keywords": [
+    "evaluation",
+    "hash",
+    "comparison"
+  ],
+  "bugs": {
+    "url": "https://github.com/MaxRoecker/evaluable/issues"
+  },
+  "homepage": "https://github.com/MaxRoecker/evaluable#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^26.5.0",
+    "prettier": "^2.2.1",
+    "serve": "^11.3.2",
+    "ts-jest": "^26.5.5",
+    "typescript": "^4.2.4"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "always"
+  },
+  "jest": {
+    "clearMocks": true,
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests.ts"
+    ],
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.ts$": "ts-jest"
+    },
+    "collectCoverage": true,
+    "coverageDirectory": "./jest/coverage",
+    "collectCoverageFrom": [
+      "./index.ts"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov"
+    ]
+  }
+}
