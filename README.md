@@ -21,13 +21,15 @@ check every rule.
 ```js
 import { is } from 'evaluable';
 
-is(null, undefined) // returns false
-
 is(null, null) // returns true
+
+is(null, undefined) // returns false
 
 is(null, '') // returns false
 
 is(+0, -0) // returns true
+
+is(0.1 + 0.2, 0.3) // returns true
 
 is(NaN, NaN) // returns true
 
@@ -104,9 +106,9 @@ is(b, c) // returns false
 
 ```
 
-To ensure compatibility with [Immutable.js][Immutable], the `Evaluable<T>`
-interface will enforce the implementation of the `hashCode` method. You can use
-the [CRUXHash][CRUXHash] library to easily create hashes from objects.
+> To ensure compatibility with [Immutable.js][Immutable], the `Evaluable<T>`
+> interface will enforce the implementation of the `hashCode` method. You can
+> use the [CRUXHash][CRUXHash] library to easily create hashes from objects.
 
 ## API
 
@@ -116,15 +118,18 @@ Returns true if the inputs have the same value, false otherwise.
 
 Two inputs, `a` and `b`, have the same value if:
 
-- Both are `undefined`;
 - Both are `null`;
-- Both are true or both false;
+- Both are `undefined`;
+- Both are `true` or both `false`;
 - Both are strings of same length with the same sequence of characters;
-- Both are numbers and both are `NaN` or both are equals;
+- Both are numbers and:
+  - both are `NaN`;
+  - both are `Infinite` or both are `-Infinite`;
+  - both are equals by some `delta` tolerance. Default: `Number.EPSILON`.
 - Both are objects and:
-  - have the `equals` method and `a.equals(b)` returns true;
-  - have the `valueOf` overwritten and `is(a.valueOf(), b.valueOf())` returns
-    true;
+  - have an `equals` method and `a.equals(b)` returns true;
+  - have an overwritten `valueOf` method and `is(a.valueOf(), b.valueOf())`
+    returns true;
   - are the same object, i.e., both references the same memory address.
 
 This function differs from:
@@ -138,6 +143,9 @@ This function differs from:
 - the [“same-value-zero” algorithm][same-value-zero], which is used in
   collections such as [`Set`][Set] and [`Map`][Map], because it considers the
   results of `equals` and overwritten `valueOf` methods.
+- the [`Immutable.is`][Immutable.is] method because it only considers the
+  results of `equals` methods and does not check the `delta` tolerance when
+  comparing numbers.
 
 ## Contributing
 
@@ -165,3 +173,5 @@ Please make sure to update tests as appropriate.
 [===]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality
 
 [Object.is]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_ObjectsObject/is
+
+[Immutable.is]: https://immutable-js.github.io/immutable-js/docs/#/is

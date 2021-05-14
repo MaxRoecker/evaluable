@@ -138,6 +138,13 @@ describe('is tests', () => {
     expect(is(-Infinity, -Infinity)).toBe(true);
   });
 
+  it('should return true for both numbers with difference within the delta', () => {
+    expect(is(0.3, 0.1 + 0.2)).toBe(true);
+    expect(is(0.1 + 0.2, 0.3)).toBe(true);
+    expect(is(1000000.1 + 0.2, 1000000.3, 1e-6)).toBe(true);
+    expect(is(1000000.3, 1000000.1 + 0.2, 1e-6)).toBe(true);
+  });
+
   it('should return false for both numbers with different values', () => {
     expect(is(Math.E, -Math.E)).toBe(false);
     expect(is(Math.E, +0)).toBe(false);
