@@ -260,11 +260,23 @@ describe('is tests', () => {
   it('should return true for both strings with same sequence', () => {
     expect(is('', '')).toBe(true);
     expect(is('abc', 'abc')).toBe(true);
+    expect(is('\u00F1', '\u00F1')).toBe(true);
+    expect(is('\u00F1', '\u006E\u0303')).toBe(true);
+    expect(is('\u006E\u0303', '\u00F1')).toBe(true);
+    expect(is('\u006E\u0303', '\u006E\u0303')).toBe(true);
   });
 
   it('should return false for both strings with different sequences', () => {
     expect(is('', 'abc')).toBe(false);
+    expect(is('', '\u00F1')).toBe(false);
+    expect(is('', '\u006E\u0303')).toBe(false);
     expect(is('abc', '')).toBe(false);
+    expect(is('abc', '\u00F1')).toBe(false);
+    expect(is('abc', '\u006E\u0303')).toBe(false);
+    expect(is('\u00F1', '')).toBe(false);
+    expect(is('\u00F1', 'abc')).toBe(false);
+    expect(is('\u006E\u0303', '')).toBe(false);
+    expect(is('\u006E\u0303', 'abc')).toBe(false);
   });
 
   it('should return false for a string and anything else', () => {

@@ -6,15 +6,16 @@
  * - Both are `undefined`;
  * - Both are `null`;
  * - Both are `true` or both `false`;
- * - Both are strings of same length with the same sequence of characters;
+ * - Both are strings with same length and with the same sequence of code points
+ *   in the [Unicode Normalized form][NormalForm];
  * - Both are numbers and:
  *   - both are `NaN`;
  *   - both are `Infinite` or both are `-Infinite`;
  *   - both are equals by some `delta` tolerance. Default: `Number.EPSILON`.
  * - Both are objects and:
  *   - have the `equals` method and `a.equals(b)` returns true;
- *   - have the `valueOf` overwritten and `is(a.valueOf(), b.valueOf())` returns
- *     true;
+ *   - have the `valueOf` method overwritten and `is(a.valueOf(), b.valueOf())`
+ *     returns true;
  *   - are the same object, i.e., both references the same memory address.
  *
  * This function differs from:
@@ -32,6 +33,7 @@
  *   results of `equals` methods and does not check the `delta` tolerance when
  *   comparing numbers.
  *
+ * [NormalForm]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
  * [==]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality
  * [===]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality
  * [Object.is]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
@@ -48,6 +50,10 @@ export const is = (a: unknown, b: unknown, delta = Number.EPSILON): boolean => {
     } else {
       return Object.is(a, b);
     }
+
+    // Checks if both are strings
+  } else if (typeof a === 'string' && typeof b === 'string') {
+    return Object.is(a.normalize('NFD'), b.normalize('NFD'));
     // Checks if both are objects or null
   } else if (typeof a === 'object' && typeof b === 'object') {
     // Checks if both are null

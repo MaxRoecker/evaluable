@@ -33,6 +33,10 @@ is(0.1 + 0.2, 0.3) // returns true
 
 is(NaN, NaN) // returns true
 
+is('abc', 'abc') // returns true
+
+is('\u00F1', '\u006E\u0303') // returns true
+
 is(new Date(0), new Date(0)) // returns true
 
 is(new Number(2), new Number(2)) // returns true
@@ -60,11 +64,11 @@ class MyClass {
 
 is(new MyClass(0), new MyClass(0)) // returns true
 
-is(new MyClass(1), new MyClass(2)) // returns false
+is(new MyClass(0), new MyClass(1)) // returns false
 ```
 
-For TypeScript users, you can also import the `Evaluable<T>` interface to guide
-the creation of objects that compared as values.
+For TypeScript users, you can import the `Evaluable<T>` interface to guide the
+creation of objects that compared as values.
 
 ```typescript
 import type { Evaluable } from 'evaluable';
@@ -112,23 +116,24 @@ is(b, c) // returns false
 
 ## API
 
-### `is(a: unknown, b: unknown)`
+### `is(a: unknown, b: unknown, delta?: number)`
 
 Returns true if the inputs have the same value, false otherwise.
 
 Two inputs, `a` and `b`, have the same value if:
 
-- Both are `null`;
 - Both are `undefined`;
+- Both are `null`;
 - Both are `true` or both `false`;
-- Both are strings of same length with the same sequence of characters;
+- Both are strings with same length and with the same sequence of code points
+  in the [Unicode Normalized form][NormalForm];
 - Both are numbers and:
   - both are `NaN`;
   - both are `Infinite` or both are `-Infinite`;
   - both are equals by some `delta` tolerance. Default: `Number.EPSILON`.
 - Both are objects and:
-  - have an `equals` method and `a.equals(b)` returns true;
-  - have an overwritten `valueOf` method and `is(a.valueOf(), b.valueOf())`
+  - have the `equals` method and `a.equals(b)` returns true;
+  - have the `valueOf` method overwritten and `is(a.valueOf(), b.valueOf())`
     returns true;
   - are the same object, i.e., both references the same memory address.
 
@@ -144,8 +149,7 @@ This function differs from:
   collections such as [`Set`][Set] and [`Map`][Map], because it considers the
   results of `equals` and overwritten `valueOf` methods.
 - the [`Immutable.is`][Immutable.is] method because it only considers the
-  results of `equals` methods and does not check the `delta` tolerance when
-  comparing numbers.
+  results of `equals` methods.
 
 ## Contributing
 
@@ -157,6 +161,8 @@ Please make sure to update tests as appropriate.
 ## License
 
 [MIT](https://maxroecker.mit-license.org/)
+
+[NormalForm]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
 
 [same-value-zero]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality
 
