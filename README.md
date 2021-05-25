@@ -2,6 +2,9 @@
 
 A tiny library to compare objects as values in ECMAScript
 
+[![View on NPM](https://img.shields.io/npm/v/evaluable?style=flat-square)](https://www.npmjs.com/package/evaluable)
+[![License](https://img.shields.io/npm/l/evaluable?style=flat-square)](https://maxroecker.mit-license.org/)
+
 ## Installation
 
 Use the npm package manager to install Evaluable.
