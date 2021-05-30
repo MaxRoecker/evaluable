@@ -81,10 +81,12 @@ import { hash } from 'cruxhash';
 class Point2D implements Evaluable {
   private x: number;
   private y: number;
+  private hash: number;
 
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
+    this.hash = hash({ x: this.x, y: this.y });
   }
 
   equals(other: unknown): boolean {
@@ -92,14 +94,14 @@ class Point2D implements Evaluable {
       this === other ||
       (other !== null &&
         other instanceof Point2D &&
-        this.hashCode() === other.hashCode() &&
+        this.hash === other.hash &&
         this.x === other.x &&
         this.y === other.y)
     );
   }
 
   hashCode(): number {
-    return hash({ x: this.x, y: this.y });
+    return this.hash;
   }
 }
 
