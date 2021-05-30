@@ -159,13 +159,15 @@ This function differs from:
 
 #### Parameters
 
-| Name  | Type     | Description                 |
-| :---- | :------- | :-------------------------- |
-| `str` | *string* | a string to generate a seed |
+| Name    | Type      | Description                                |
+| :------ | :-------- | :----------------------------------------- |
+| `a`     | *unknown* | an input                                   |
+| `b`     | *unknown* | another input                              |
+| `delta` | *number*  | the minimum difference between two numbers |
 
-**Returns:** *number*
+**Returns:** *boolean*
 
-an unsigned integer
+`true` if the inputs have the same value, `false` otherwise.
 
 ## Contributing
 
