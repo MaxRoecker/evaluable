@@ -119,7 +119,9 @@ is(b, c) // returns false
 
 ## API
 
-### `is(a: unknown, b: unknown, delta?: number)`
+### is
+
+▸ `Const` **is**(`a`: *unknown*, `b`: *unknown*, `delta`: *number*): *boolean*
 
 Returns true if the inputs have the same value, false otherwise.
 
@@ -152,7 +154,18 @@ This function differs from:
   collections such as [`Set`][Set] and [`Map`][Map], because it considers the
   results of `equals` and overwritten `valueOf` methods.
 - the [`Immutable.is`][Immutable.is] method because it only considers the
-  results of `equals` methods.
+  results of `equals` methods and does not check the `delta` tolerance when
+  comparing numbers.
+
+#### Parameters
+
+| Name  | Type     | Description                 |
+| :---- | :------- | :-------------------------- |
+| `str` | *string* | a string to generate a seed |
+
+**Returns:** *number*
+
+an unsigned integer
 
 ## Contributing
 

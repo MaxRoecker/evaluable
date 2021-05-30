@@ -41,6 +41,11 @@
  * [Set]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  * [Map]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
  * [Immutable.is]: https://immutable-js.github.io/immutable-js/docs/#/is
+ *
+ * @param a an input
+ * @param b another input
+ * @param delta the minimum difference between two numbers
+ * @returns `true` if the inputs have the same value, `false` otherwise.
  */
 export const is = (a: unknown, b: unknown, delta = Number.EPSILON): boolean => {
   // Checks if both are numbers
@@ -54,6 +59,7 @@ export const is = (a: unknown, b: unknown, delta = Number.EPSILON): boolean => {
     // Checks if both are strings
   } else if (typeof a === 'string' && typeof b === 'string') {
     return Object.is(a.normalize('NFD'), b.normalize('NFD'));
+
     // Checks if both are objects or null
   } else if (typeof a === 'object' && typeof b === 'object') {
     // Checks if both are null
@@ -86,6 +92,8 @@ export const is = (a: unknown, b: unknown, delta = Number.EPSILON): boolean => {
         return Object.is(aobj, bobj);
       }
     }
+
+    // Otherwise, defaults to Object.is
   } else {
     return Object.is(a, b);
   }
@@ -100,10 +108,14 @@ export interface Evaluable<T = Object> {
   /**
    * Returns true if this object is equal to other as a value, false otherwise.
    * If implemented, will be used by the function `is`.
+   *
+   * @param other some other value to be compared.
+   * @returns `true` if the objects are equal, `false` otherwise.
    */
   equals(other: unknown): boolean;
 
   /**
+   *
    * Returns a hash for the object. It's used to quickly differentiate objects.
    * It's recommended to return an unsigned integer as result.
    *
@@ -112,15 +124,28 @@ export interface Evaluable<T = Object> {
    * different `hashCode`, they must not be equal.
    *
    * [Hash Collision]: http://en.wikipedia.org/wiki/Collision_(computer_science)
+   *
+   * @returns the hash code of the object
    */
   hashCode(): number;
 
   /**
    * Returns a value of the object.
    *
-   * By default, the `valueOf` method is inherited by every object descended
-   * from `Object`. If an object has no primitive value, `valueOf` returns the
-   * object itself. It will be used by the function `is` if overwritten.
+   * By default, the [`valueOf` method][valueOf] is inherited by every object
+   * descended from `Object`. If an object has no primitive value, `valueOf`
+   * returns the object itself.
+   *
+   * You can use valueOf within your own code to convert a built-in object into
+   * a primitive value. When you create a custom object, you can override
+   * `Object.prototype.valueOf` to call a custom method instead of the default
+   * `Object` method.
+   *
+   * It will be used by the function `is` if overwritten.
+   *
+   * [valueOf]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf
+   *
+   * @returns the primitive value of the specified object.
    */
   valueOf(): T;
 }
