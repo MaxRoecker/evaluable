@@ -6,25 +6,27 @@
  * - Both are `undefined`;
  * - Both are `null`;
  * - Both are `true` or both `false`;
+ * - Both are the same symbol;
+ * - Both are the same bigint;
  * - Both are strings with same length and with the same sequence of code points
- *   in the [Unicode Normalized form][NormalForm];
+ *   in the [Unicode Normalized NFC form][NormalForm];
  * - Both are numbers and:
  *   - both are `NaN`;
  *   - both are `Infinite` or both are `-Infinite`;
  *   - both are equals by some `delta` tolerance. Default: `Number.EPSILON`.
  * - Both are objects and:
- *   - have the `equals` method and `a.equals(b)` returns true;
+ *   - have the `equals` method and `a.equals(b)` returns true, or;
  *   - have the `valueOf` method overwritten and `is(a.valueOf(), b.valueOf())`
- *     returns true;
+ *     returns true, or;
  *   - are the same object, i.e., both references the same memory address.
  *
- * This function differs from:
+ * The `is` function differs from:
  *
- * - the [`==` operator][==] because it does not perform a type conversion when
+ * - the [`==` operator][==], because it does not perform a type conversion when
  *   comparing the inputs;
- * - the [`===` operator][===] because it returns true when comparing `NaN` with
- *   itself;
- * - the [`Object.is` method][Object.is] because it returns true when comparing
+ * - the [`===` operator][===], because it returns true when comparing `NaN`
+ *   with `NaN`;
+ * - the [`Object.is` method][Object.is], because it returns true when comparing
  *   `+0` and `-0`;
  * - the [“same-value-zero” algorithm][same-value-zero], which is used in
  *   collections such as [`Set`][Set] and [`Map`][Map], because it considers the
@@ -47,64 +49,56 @@
  * @param delta the minimum difference between two numbers
  * @returns `true` if the inputs have the same value, `false` otherwise.
  */
-export const is = (a: unknown, b: unknown, delta = Number.EPSILON): boolean => {
+export function is(a: unknown, b: unknown, delta = Number.EPSILON): boolean {
   // Checks if both are numbers
   if (typeof a === 'number' && typeof b === 'number') {
-    if (Number.isFinite(a) && Number.isFinite(b)) {
-      return Math.abs(a - b) < delta;
-    } else {
-      return Object.is(a, b);
-    }
-
-    // Checks if both are strings
-  } else if (typeof a === 'string' && typeof b === 'string') {
-    return Object.is(a.normalize('NFD'), b.normalize('NFD'));
-
-    // Checks if both are objects or null
-  } else if (typeof a === 'object' && typeof b === 'object') {
-    // Checks if both are null
-    if (a === null || b === null) {
-      return a === b;
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const aobj: any = a;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const bobj: any = b;
-
-      // Checks if both have the equals method.
-      if (
-        typeof aobj.equals === 'function' &&
-        typeof bobj.equals === 'function'
-      ) {
-        return aobj.equals(bobj);
-
-        // Checks if both have the overwritten valueOf method
-      } else if (
-        typeof aobj.valueOf === 'function' &&
-        aobj.valueOf !== Object.prototype.valueOf &&
-        typeof bobj.valueOf === 'function' &&
-        bobj.valueOf !== Object.prototype.valueOf
-      ) {
-        return is(aobj.valueOf(), bobj.valueOf());
-
-        // Checks if both are the same reference
-      } else {
-        return Object.is(aobj, bobj);
-      }
-    }
-
-    // Otherwise, defaults to Object.is
-  } else {
-    return Object.is(a, b);
+    return Number.isFinite(a) && Number.isFinite(b)
+      ? Math.abs(a - b) < delta
+      : Object.is(a, b);
   }
-};
+
+  // Checks if both are strings
+  if (typeof a === 'string' && typeof b === 'string') {
+    return Object.is(a.normalize('NFC'), b.normalize('NFC'));
+  }
+
+  // Checks if both are objects or null
+  if (typeof a === 'object' && typeof b === 'object') {
+    // Checks if both are null
+    if (a === null || b === null) return a === b;
+
+    // Checks if both have the equals method.
+    if (
+      'equals' in a &&
+      'equals' in b &&
+      typeof a.equals === 'function' &&
+      typeof a.equals === 'function'
+    ) {
+      return a.equals(b);
+    }
+
+    // Checks if both have the overwritten valueOf method
+    if (
+      'valueOf' in a &&
+      'valueOf' in b &&
+      typeof a.valueOf === 'function' &&
+      typeof b.valueOf === 'function' &&
+      a.valueOf !== Object.prototype.valueOf &&
+      b.valueOf !== Object.prototype.valueOf
+    ) {
+      return is(a.valueOf(), b.valueOf());
+    }
+  }
+
+  // Otherwise, defaults to Object.is
+  return Object.is(a, b);
+}
 
 /**
  * An interface to represent objects as values. Implement this interface to
  * compare objects as values with the function `is`.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export interface Evaluable<T = Object> {
+export interface Evaluable<T = object> {
   /**
    * Returns true if this object is equal to other as a value, false otherwise.
    * If implemented, will be used by the function `is`.
